@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101713">
+  <title>SmartBat | Cricket Performance Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#" aria-label="SmartBat home">
+        <span class="brand-mark">S<span>B</span></span>
+        <span class="brand-copy"><strong>SMARTBAT</strong><small>CRICKET PERFORMANCE LAB</small></span>
+      </a>
+      <div class="side-label">WORKSPACE</div>
+      <nav class="nav">
+        <button class="nav-link active" data-view="overview"><span class="nav-icon">▦</span> Overview</button>
+        <button class="nav-link" data-view="sessions"><span class="nav-icon">◷</span> Sessions</button>
+        <button class="nav-link" data-view="analysis"><span class="nav-icon">⌁</span> Swing analysis</button>
+        <button class="nav-link" data-view="device"><span class="nav-icon">⌑</span> Device setup</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="connection-card">
+          <span class="status-dot"></span>
+          <div><strong>Demo mode</strong><small>Hardware not connected</small></div>
+        </div>
+        <div class="profile">
+          <div class="avatar">SB</div>
+          <div><strong>Player profile</strong><small>Local workspace</small></div>
+          <span class="more">•••</span>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="mobile-menu" id="mobileMenu" aria-label="Open navigation">☰</button>
+        <div class="breadcrumb">Workspace <span>/</span> <strong id="crumb">Overview</strong></div>
+        <div class="top-actions">
+          <span class="demo-pill"><i></i> SIMULATED DATA</span>
+          <button class="icon-button" id="exportBtn" title="Export session data">↓</button>
+        </div>
+      </header>
+
+      <section class="view active" id="overview">
+        <div class="page-heading">
+          <div><p class="eyebrow">MONDAY · PERFORMANCE WORKSPACE</p><h1>Batting overview<span>.</span></h1><p class="subheading">Understand every swing. Build consistency over time.</p></div>
+          <button class="primary-button" id="newSessionBtn"><span>＋</span> New practice session</button>
+        </div>
+
+        <div class="notice"><span class="notice-icon">ⓘ</span><div><strong>Preview environment</strong><p>You're viewing sample data. Connect a sensor-equipped bat later to replace simulated readings with real measurements.</p></div><button id="dismissNotice" aria-label="Dismiss notice">×</button></div>
+
+        <div class="metric-grid">
+          <article class="metric-card"><div class="metric-top"><span>SWINGS RECORDED</span><span class="metric-symbol">↗</span></div><div class="metric-value" id="totalSwings">24</div><div class="metric-foot"><span class="positive">+6</span> <span>this session</span></div></article>
+          <article class="metric-card"><div class="metric-top"><span>PEAK ANGULAR SPEED</span><span class="metric-symbol">⌁</span></div><div class="metric-value"><span id="peakSpeed">8.6</span><small>rad/s</small></div><div class="metric-foot">Highest detected swing</div></article>
+          <article class="metric-card"><div class="metric-top"><span>AVG. SWING DURATION</span><span class="metric-symbol">◷</span></div><div class="metric-value"><span id="avgDuration">0.74</span><small>sec</small></div><div class="metric-foot">Across recorded swings</div></article>
+          <article class="metric-card"><div class="metric-top"><span>IMPACT EVENTS</span><span class="metric-symbol">✳</span></div><div class="metric-value" id="impactCount">18</div><div class="metric-foot">Detected in sample data</div></article>
+        </div>
+
+        <div class="content-grid">
+          <article class="panel chart-panel">
+            <div class="panel-heading"><div><p class="eyebrow">MOTION DATA</p><h2>Swing speed profile</h2><p class="panel-desc">Angular velocity across a representative swing</p></div><span class="chart-tag">RAD/S</span></div>
+            <div class="chart-wrap"><canvas id="speedChart" aria-label="Swing angular velocity chart"></canvas></div>
+            <div class="chart-legend"><span><i class="legend-dot lime"></i> Angular velocity</span><span class="muted">Sample swing · simulated</span></div>
+          </article>
+          <article class="panel session-panel">
+            <div class="panel-heading"><div><p class="eyebrow">RECENT ACTIVITY</p><h2>Practice sessions</h2></div><button class="text-button" data-goto="sessions">View all →</button></div>
+            <div class="session-list" id="recentSessions"></div>
+          </article>
+        </div>
+
+        <div class="content-grid lower-grid">
+          <article class="panel">
+            <div class="panel-heading"><div><p class="eyebrow">REPEATABILITY</p><h2>Consistency by swing</h2><p class="panel-desc">Peak angular velocity for the latest sample swings</p></div></div>
+            <div class="chart-wrap small"><canvas id="consistencyChart" aria-label="Swing consistency chart"></canvas></div>
+          </article>
+          <article class="panel insight-panel">
+            <div class="panel-heading"><div><p class="eyebrow">ANALYSIS NOTE</p><h2>What the data says</h2></div><span class="spark">✳</span></div>
+            <div class="insight-callout"><span class="insight-line"></span><div><strong>Compare like-for-like swings</strong><p>Use the same shot type and practice setup when comparing sessions. This makes changes in the sensor readings easier to interpret.</p></div></div>
+            <div class="insight-foot">INSIGHT IS GUIDANCE, NOT A COACHING OR SAFETY ASSESSMENT.</div>
+          </article>
+        </div>
+      </section>
+
+      <section class="view" id="sessions">
+        <div class="page-heading"><div><p class="eyebrow">YOUR TRAINING HISTORY</p><h1>Practice sessions<span>.</span></h1><p class="subheading">Review recorded swings and compare practice days.</p></div><button class="primary-button" id="newSessionBtn2">＋ New session</button></div>
+        <div class="panel table-panel"><div class="panel-heading"><div><p class="eyebrow">SESSION LOG</p><h2>All sessions</h2></div><span class="chart-tag">LOCAL DEMO DATA</span></div><div class="table-scroll"><table><thead><tr><th>SESSION</th><th>DATE</th><th>SWINGS</th><th>PEAK SPEED</th><th>AVG. DURATION</th><th>STATUS</th></tr></thead><tbody id="sessionTable"></tbody></table></div></div>
+      </section>
+
+      <section class="view" id="analysis">
+        <div class="page-heading"><div><p class="eyebrow">MOTION BREAKDOWN</p><h1>Swing analysis<span>.</span></h1><p class="subheading">Explore the signals collected during a batting movement.</p></div><span class="demo-pill"><i></i> SAMPLE SWING</span></div>
+        <div class="analysis-grid">
+          <article class="panel"><div class="panel-heading"><div><p class="eyebrow">GYROSCOPE</p><h2>Angular velocity</h2><p class="panel-desc">Rotation rate measured around the sensor axes.</p></div></div><div class="chart-wrap"><canvas id="axisChart"></canvas></div><div class="chart-legend"><span><i class="legend-dot lime"></i> X axis</span><span><i class="legend-dot teal"></i> Y axis</span><span><i class="legend-dot purple"></i> Z axis</span></div></article>
+          <article class="panel"><div class="panel-heading"><div><p class="eyebrow">ACCELEROMETER</p><h2>Linear acceleration</h2><p class="panel-desc">Example acceleration signal from a motion sensor.</p></div></div><div class="chart-wrap"><canvas id="accelChart"></canvas></div><div class="chart-legend"><span><i class="legend-dot lime"></i> X</span><span><i class="legend-dot teal"></i> Y</span><span><i class="legend-dot purple"></i> Z</span></div></article>
+        </div>
+        <div class="panel methodology"><p class="eyebrow">HOW TO READ THIS</p><h2>Signals are not performance by themselves.</h2><p>Angular velocity describes how quickly the sensor rotates. Acceleration describes changes in velocity and includes gravity. To estimate useful batting metrics, the system will need a known sensor orientation, calibration, a consistent mounting position, and carefully labeled practice trials. These charts currently use synthetic data only.</p></div>
+      </section>
+
+      <section class="view" id="device">
+        <div class="page-heading"><div><p class="eyebrow">HARDWARE WORKSPACE</p><h1>Device setup<span>.</span></h1><p class="subheading">Prepare the sensor system for a future connection.</p></div><span class="status-label"><i></i> NOT CONNECTED</span></div>
+        <div class="device-layout">
+          <article class="panel device-card"><div class="device-visual"><div class="device-orbit"></div><div class="chip">SB</div><span class="device-pulse"></span></div><p class="eyebrow">SMARTBAT SENSOR NODE</p><h2>Awaiting hardware</h2><p class="panel-desc">The website is ready for a future data connection. No physical device has been paired.</p><div class="device-spec"><span>Microcontroller</span><strong>Not selected</strong></div><div class="device-spec"><span>Motion sensor</span><strong>Not selected</strong></div><div class="device-spec"><span>Connection</span><strong>Offline</strong></div><button class="secondary-button" id="deviceInfo">View connection plan</button></article>
+          <article class="panel setup-steps"><p class="eyebrow">INTEGRATION ROADMAP</p><h2>From prototype to live data</h2><div class="step"><b>01</b><div><strong>Choose the electronics</strong><p>Select a microcontroller and a 6-axis or 9-axis IMU. Confirm voltage and interface compatibility.</p></div><span class="step-state">PENDING</span></div><div class="step"><b>02</b><div><strong>Collect sensor readings</strong><p>Firmware sends timestamped accelerometer and gyroscope values over USB serial or Bluetooth.</p></div><span class="step-state">PENDING</span></div><div class="step"><b>03</b><div><strong>Connect the data pipeline</strong><p>A local Python service validates, timestamps, and stores readings before the dashboard displays them.</p></div><span class="step-state">PENDING</span></div><div class="step"><b>04</b><div><strong>Calibrate and validate</strong><p>Compare repeatable movements with a reference method before presenting metrics as meaningful.</p></div><span class="step-state">PENDING</span></div><div class="integration-note"><strong>Important design note</strong><p>For the first prototype, use a removable, securely enclosed sensor mount. Avoid drilling or cutting the bat, and test with controlled practice movements before using it in normal play.</p></div></article>
+        </div>
+      </section>
+      <footer><span>SMARTBAT <b>·</b> CRICKET PERFORMANCE LAB</span><span>Prototype interface v0.1 <b>·</b> Sample data only</span></footer>
+    </main>
+  </div>
+
+  <dialog id="sessionDialog">
+    <form method="dialog" class="dialog-content" id="sessionForm">
+      <button class="dialog-close" value="cancel" aria-label="Close">×</button>
+      <p class="eyebrow">PRACTICE TRACKER</p><h2>Start a session</h2><p class="panel-desc">Create a local demo session. This does not record real sensor data yet.</p>
+      <label for="sessionName">Session name</label><input id="sessionName" maxlength="40" placeholder="e.g. Net practice" required>
+      <label for="shotType">Practice focus</label><select id="shotType"><option>General batting</option><option>Front-foot drives</option><option>Back-foot shots</option><option>Defensive technique</option><option>Power hitting</option></select>
+      <div class="dialog-actions"><button class="secondary-button" value="cancel">Cancel</button><button class="primary-button" id="createSession" value="default">Create session</button></div>
+    </form>
+  </dialog>
+  <dialog id="infoDialog"><div class="dialog-content"><button class="dialog-close" id="closeInfo">×</button><p class="eyebrow">FUTURE CONNECTION</p><h2>Hardware integration plan</h2><p>Recommended first architecture:</p><ol><li>IMU sensor connected to a microcontroller.</li><li>Microcontroller streams timestamped CSV readings.</li><li>Python receives and validates the stream.</li><li>Python exposes a local API or WebSocket feed.</li><li>This dashboard displays live and saved session data.</li></ol><p class="panel-desc">The exact board and sensor will be selected before writing device-specific firmware.</p><button class="primary-button" id="closeInfo2">Got it</button></div></dialog>
+  <script src="app.js"></script>
+</body>
+</html>
